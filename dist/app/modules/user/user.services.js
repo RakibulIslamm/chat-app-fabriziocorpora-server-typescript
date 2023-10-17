@@ -33,7 +33,7 @@ const registerUserDB = (user) => __awaiter(void 0, void 0, void 0, function* () 
 exports.registerUserDB = registerUserDB;
 //* Login
 const loginDB = (username) => __awaiter(void 0, void 0, void 0, function* () {
-    const user = yield user_model_1.default.findOne({ username: username }).select('_id username');
+    const user = yield user_model_1.default.findOne({ username: username });
     if (!user) {
         throw new ApiError_1.default(404, `Username of this '${username}' user is not exist`);
     }

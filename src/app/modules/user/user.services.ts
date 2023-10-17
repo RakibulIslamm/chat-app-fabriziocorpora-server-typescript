@@ -28,7 +28,6 @@ export const loginDB = async (username: string): Promise<Partial<UserType>> => {
   if (!user) {
     throw new ApiError(404, `Username of this '${username}' user is not exist`);
   }
-
   return user;
 };
 
