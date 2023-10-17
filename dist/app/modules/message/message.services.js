@@ -20,10 +20,12 @@ const ApiError_1 = __importDefault(require("../../errors/ApiError"));
 const http_status_1 = __importDefault(require("http-status"));
 //* Send message
 const sendMessageDB = (message) => __awaiter(void 0, void 0, void 0, function* () {
-    const newMessage = yield message_model_1.default.create(message);
+    // const newMessage = await Message.create(message);
+    const newMessage = new message_model_1.default(message);
     yield newMessage.populate('sender');
     yield newMessage.populate('replyTo');
     server_1.default.io.emit('message', newMessage);
+    yield newMessage.save();
     return newMessage;
 });
 exports.sendMessageDB = sendMessageDB;

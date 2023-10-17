@@ -9,11 +9,12 @@ import httpStatus from 'http-status';
 export const sendMessageDB = async (
   message: Partial<MessageType>
 ): Promise<MessageType> => {
-  const newMessage = await Message.create(message);
+  // const newMessage = await Message.create(message);
+  const newMessage = new Message(message);
   await newMessage.populate('sender');
   await newMessage.populate('replyTo');
   global.io.emit('message', newMessage);
-
+  await newMessage.save();
   return newMessage;
 };
 
