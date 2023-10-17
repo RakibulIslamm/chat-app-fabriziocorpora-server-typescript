@@ -27,9 +27,7 @@ const registerUserDB = (user) => __awaiter(void 0, void 0, void 0, function* () 
     if (!user.username) {
         throw new Error(`Username required`);
     }
-    let result = new user_model_1.default(user);
-    result = yield result.save();
-    result = yield user_model_1.default.findById(result._id).select('_id username');
+    const result = user_model_1.default.create(user);
     return result;
 });
 exports.registerUserDB = registerUserDB;

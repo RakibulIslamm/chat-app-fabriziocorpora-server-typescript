@@ -18,11 +18,7 @@ export const registerUserDB = async (
   if (!user.username) {
     throw new Error(`Username required`);
   }
-
-  let result = new User(user);
-  result = await result.save();
-  result = await User.findById(result._id).select('_id username');
-
+  const result = User.create(user);
   return result;
 };
 
