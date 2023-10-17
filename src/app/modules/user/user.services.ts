@@ -24,9 +24,7 @@ export const registerUserDB = async (
 
 //* Login
 export const loginDB = async (username: string): Promise<Partial<UserType>> => {
-  const user = await User.findOne({ username: username }).select(
-    '_id username'
-  );
+  const user = await User.findOne({ username: username });
   if (!user) {
     throw new ApiError(404, `Username of this '${username}' user is not exist`);
   }
