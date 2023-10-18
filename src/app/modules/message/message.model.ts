@@ -3,8 +3,8 @@ import { MessageModel, MessageType } from './message.interface';
 
 const MessageSchema = new Schema<MessageType>({
   sender: {
-    name: String,
-    id: String,
+    name: { type: String },
+    id: { type: Schema.Types.ObjectId },
   },
   conversationId: {
     type: Schema.Types.ObjectId,
