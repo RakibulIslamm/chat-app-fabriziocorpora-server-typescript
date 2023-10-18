@@ -28,9 +28,7 @@ export const getMessagesDB = async (
     .equals(conversationId)
     .sort({ timestamp: -1 })
     .skip(0)
-    .limit(16)
-    .populate('sender')
-    .populate('replyTo');
+    .limit(16);
   return messages;
 };
 
@@ -48,9 +46,7 @@ export const getMoreMessagesDB = async (
     .equals(conversationId)
     .sort({ timestamp: -1 })
     .skip(skip)
-    .limit(limit)
-    .populate('sender')
-    .populate('replyTo');
+    .limit(limit);
   return messages;
 };
 
