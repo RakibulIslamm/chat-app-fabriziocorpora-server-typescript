@@ -1,6 +1,5 @@
 import { Schema, model } from 'mongoose';
 import { MessageModel, MessageType } from './message.interface';
-import User from '../user/user.model';
 
 const MessageSchema = new Schema<MessageType>({
   sender: {
