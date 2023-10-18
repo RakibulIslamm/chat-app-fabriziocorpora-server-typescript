@@ -34,16 +34,6 @@ export const updateConversationsDB = async (
     ...data,
   };
 
-  global.io.emit('update-conversation', {
-    data: {
-      lastMessage: data.lastMessage,
-      sender: data.sender,
-      img: data.img,
-      timestamp: data.timestamp,
-    },
-    id: conversationId,
-  });
-
   const updatedConversation = await Conversation.findByIdAndUpdate(
     conversationId,
     updatedDoc,
@@ -51,6 +41,11 @@ export const updateConversationsDB = async (
   )
     .populate('participants')
     .populate('sender');
+
+  global.io.emit('update-conversation', {
+    data: updatedConversation,
+    id: conversationId,
+  });
   return updatedConversation;
 };
 
