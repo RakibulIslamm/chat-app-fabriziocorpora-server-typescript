@@ -1,8 +1,9 @@
 import { Model, Schema } from 'mongoose';
+import { UserType } from '../user/user.interface';
 
 export type MessageType = {
   _id?: string;
-  sender: Schema.Types.ObjectId;
+  sender: UserType;
   receiver: Schema.Types.ObjectId;
   conversationId: Schema.Types.ObjectId;
   message: string;
