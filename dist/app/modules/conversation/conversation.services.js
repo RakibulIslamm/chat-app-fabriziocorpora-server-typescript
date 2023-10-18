@@ -38,13 +38,18 @@ const updateConversationsDB = (conversationId, data) => __awaiter(void 0, void 0
         throw new ApiError_1.default(http_status_1.default.BAD_REQUEST, 'Conversation Not found');
     }
     const updatedDoc = Object.assign({}, data);
+    server_1.default.io.emit('update-conversation', {
+        data: {
+            lastMessage: data.lastMessage,
+            sender: data.sender,
+            img: data.img,
+            timestamp: data.timestamp,
+        },
+        id: conversationId,
+    });
     const updatedConversation = yield conversation_model_1.default.findByIdAndUpdate(conversationId, updatedDoc, { new: true })
         .populate('participants')
         .populate('sender');
-    server_1.default.io.emit('update-conversation', {
-        data: updatedConversation,
-        id: conversationId,
-    });
     return updatedConversation;
 });
 exports.updateConversationsDB = updateConversationsDB;
