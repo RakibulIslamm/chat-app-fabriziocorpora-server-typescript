@@ -22,8 +22,6 @@ const http_status_1 = __importDefault(require("http-status"));
 const sendMessageDB = (message) => __awaiter(void 0, void 0, void 0, function* () {
     // const newMessage = await Message.create(message);
     const newMessage = new message_model_1.default(message);
-    yield newMessage.populate('sender');
-    yield newMessage.populate('replyTo');
     server_1.default.io.emit('message', newMessage);
     yield newMessage.save();
     return newMessage;
@@ -39,9 +37,7 @@ const getMessagesDB = (conversationId) => __awaiter(void 0, void 0, void 0, func
         .equals(conversationId)
         .sort({ timestamp: -1 })
         .skip(0)
-        .limit(16)
-        .populate('sender')
-        .populate('replyTo');
+        .limit(16);
     return messages;
 });
 exports.getMessagesDB = getMessagesDB;
@@ -55,9 +51,7 @@ const getMoreMessagesDB = (conversationId, limit = 10, skip = 0) => __awaiter(vo
         .equals(conversationId)
         .sort({ timestamp: -1 })
         .skip(skip)
-        .limit(limit)
-        .populate('sender')
-        .populate('replyTo');
+        .limit(limit);
     return messages;
 });
 exports.getMoreMessagesDB = getMoreMessagesDB;

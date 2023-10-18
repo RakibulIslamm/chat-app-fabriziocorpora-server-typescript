@@ -3,8 +3,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = require("mongoose");
 const MessageSchema = new mongoose_1.Schema({
     sender: {
-        type: mongoose_1.Schema.Types.ObjectId,
-        ref: 'User',
+        name: { type: String },
+        id: { type: mongoose_1.Schema.Types.ObjectId },
     },
     conversationId: {
         type: mongoose_1.Schema.Types.ObjectId,
@@ -13,7 +13,11 @@ const MessageSchema = new mongoose_1.Schema({
     message: { type: String },
     img: { type: String },
     timestamp: { type: Number },
-    replyTo: { type: mongoose_1.Schema.Types.ObjectId, ref: 'Message' },
+    replyTo: {
+        _id: String,
+        message: String,
+        img: String,
+    },
     status: { type: String },
     seen: [
         {
