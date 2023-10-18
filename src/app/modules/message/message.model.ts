@@ -5,7 +5,6 @@ const MessageSchema = new Schema<MessageType>({
   sender: {
     name: String,
     id: String,
-    user: { type: Schema.Types.ObjectId, ref: 'User' },
   },
   conversationId: {
     type: Schema.Types.ObjectId,
