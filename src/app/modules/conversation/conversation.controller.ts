@@ -83,7 +83,7 @@ export const deleteConversation = async (req: Request, res: Response) => {
     success: true,
     data: { deletedConversation },
     meta: null,
-    message: 'Conversation created successfully',
+    message: 'Conversation deleted successfully',
   });
 };
 
@@ -105,7 +105,7 @@ export const getConversations = async (
       success: true,
       data: conversations,
       meta: null,
-      message: 'Conversation created successfully',
+      message: 'Conversations retrieved successfully',
       count: count,
     });
   } catch (error) {
@@ -131,7 +131,7 @@ export const getMoreConversations = async (
       success: true,
       data: conversations,
       meta: null,
-      message: 'Conversation created successfully',
+      message: 'Conversations retrieved successfully',
     });
   } catch (error) {
     next(error);
@@ -154,7 +154,7 @@ export const getSingleConversation = async (
       success: true,
       data: conversations,
       meta: null,
-      message: 'Conversation created successfully',
+      message: 'Conversation retrieved successfully',
     });
   } catch (error) {
     next(error);

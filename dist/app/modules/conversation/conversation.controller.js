@@ -77,7 +77,7 @@ const deleteConversation = (req, res) => __awaiter(void 0, void 0, void 0, funct
         success: true,
         data: { deletedConversation },
         meta: null,
-        message: 'Conversation created successfully',
+        message: 'Conversation deleted successfully',
     });
 });
 exports.deleteConversation = deleteConversation;
@@ -94,7 +94,7 @@ const getConversations = (req, res, next) => __awaiter(void 0, void 0, void 0, f
             success: true,
             data: conversations,
             meta: null,
-            message: 'Conversation created successfully',
+            message: 'Conversations retrieved successfully',
             count: count,
         });
     }
@@ -113,7 +113,7 @@ const getMoreConversations = (req, res, next) => __awaiter(void 0, void 0, void 
             success: true,
             data: conversations,
             meta: null,
-            message: 'Conversation created successfully',
+            message: 'Conversations retrieved successfully',
         });
     }
     catch (error) {
@@ -131,7 +131,7 @@ const getSingleConversation = (req, res, next) => __awaiter(void 0, void 0, void
             success: true,
             data: conversations,
             meta: null,
-            message: 'Conversation created successfully',
+            message: 'Conversation retrieved successfully',
         });
     }
     catch (error) {
