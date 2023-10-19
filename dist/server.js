@@ -20,6 +20,7 @@ const config_1 = __importDefault(require("./config"));
 const socket_io_1 = require("socket.io");
 const message_model_1 = __importDefault(require("./app/modules/message/message.model"));
 const user_model_1 = __importDefault(require("./app/modules/user/user.model"));
+const conversation_model_1 = __importDefault(require("./app/modules/conversation/conversation.model"));
 const server = http_1.default.createServer(app_1.default);
 const io = new socket_io_1.Server(server, {
     pingTimeout: 60000,
@@ -118,9 +119,17 @@ io.on('connection', socket => {
         }
     }));
     //* Message seen
-    socket.on('seen', ({ id, user }) => __awaiter(void 0, void 0, void 0, function* () {
-        const seenMessage = yield message_model_1.default.findByIdAndUpdate(id, { status: 'seen', $push: { seen: user } }, { new: true });
-        io.emit('seen', { message: seenMessage, id });
+    socket.on('seen-m', ({ id, userId }) => __awaiter(void 0, void 0, void 0, function* () {
+        const seenMessage = yield message_model_1.default.findByIdAndUpdate(id, { status: 'seen', $push: { seen: userId } }, { new: true });
+        io.emit('seen-m', { message: seenMessage, id });
+    }));
+    //* unseen messages count seen
+    socket.on('seen-c', ({ conversationId, userId }) => __awaiter(void 0, void 0, void 0, function* () {
+        const conversation = yield conversation_model_1.default.findById(conversationId);
+        if (conversation && conversation.sender !== userId) {
+            const updateConversation = yield conversation_model_1.default.findByIdAndUpdate(conversationId, { unseenMessages: 0 }, { new: true });
+            io.emit('seen-c', updateConversation);
+        }
     }));
 });
 process.on('SIGTERM', () => {

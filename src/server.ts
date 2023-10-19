@@ -6,6 +6,7 @@ import config from './config';
 import { Server } from 'socket.io';
 import Message from './app/modules/message/message.model';
 import User from './app/modules/user/user.model';
+import Conversation from './app/modules/conversation/conversation.model';
 
 declare module 'socket.io' {
   // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
@@ -127,13 +128,27 @@ io.on('connection', socket => {
   });
 
   //* Message seen
-  socket.on('seen', async ({ id, user }) => {
+  socket.on('seen-m', async ({ id, userId }) => {
     const seenMessage = await Message.findByIdAndUpdate(
       id,
-      { status: 'seen', $push: { seen: user } },
+      { status: 'seen', $push: { seen: userId } },
       { new: true }
     );
-    io.emit('seen', { message: seenMessage, id });
+    io.emit('seen-m', { message: seenMessage, id });
+  });
+
+  //* unseen messages count seen
+  socket.on('seen-c', async ({ conversationId, userId }) => {
+    const conversation = await Conversation.findById(conversationId);
+
+    if (conversation && conversation.sender !== userId) {
+      const updateConversation = await Conversation.findByIdAndUpdate(
+        conversationId,
+        { unseenMessages: 0 },
+        { new: true }
+      );
+      io.emit('seen-c', updateConversation);
+    }
   });
 });
 
