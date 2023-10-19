@@ -6,7 +6,7 @@ export type ConversationType = {
   groupCreator?: Schema.Types.ObjectId;
   groupColor?: string;
   participants: [Schema.Types.ObjectId];
-  sender: Schema.Types.ObjectId;
+  sender: string;
   lastMessage?: string;
   img: boolean;
   timestamp: number;

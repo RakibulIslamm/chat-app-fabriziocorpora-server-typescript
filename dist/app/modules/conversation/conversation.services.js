@@ -29,6 +29,7 @@ const createConversationDB = (data) => __awaiter(void 0, void 0, void 0, functio
 exports.createConversationDB = createConversationDB;
 //* Update conversation
 const updateConversationsDB = (conversationId, data) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a, _b;
     if (!conversationId) {
         throw new ApiError_1.default(http_status_1.default.BAD_REQUEST, 'Conversation id required');
     }
@@ -36,7 +37,9 @@ const updateConversationsDB = (conversationId, data) => __awaiter(void 0, void 0
     if (!conversation) {
         throw new ApiError_1.default(http_status_1.default.BAD_REQUEST, 'Conversation Not found');
     }
-    const unseenCount = conversation.sender !== data.sender ? 1 : conversation.unseenMessages + 1;
+    const unseenCount = ((_a = conversation === null || conversation === void 0 ? void 0 : conversation.sender) === null || _a === void 0 ? void 0 : _a.toString()) !== ((_b = data === null || data === void 0 ? void 0 : data.sender) === null || _b === void 0 ? void 0 : _b.toString())
+        ? 1
+        : conversation.unseenMessages + 1;
     const updatedDoc = Object.assign(Object.assign({}, data), { unseenMessages: unseenCount });
     server_1.default.io.emit('update-conversation', {
         data: Object.assign({}, data),

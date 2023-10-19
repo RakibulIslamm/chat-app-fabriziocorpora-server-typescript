@@ -30,7 +30,9 @@ export const updateConversationsDB = async (
   }
 
   const unseenCount =
-    conversation.sender !== data.sender ? 1 : conversation.unseenMessages + 1;
+    conversation?.sender?.toString() !== data?.sender?.toString()
+      ? 1
+      : conversation.unseenMessages + 1;
 
   const updatedDoc = {
     ...data,

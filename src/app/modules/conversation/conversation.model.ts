@@ -13,8 +13,7 @@ const ConversationSchema = new Schema<ConversationType>({
     },
   ],
   sender: {
-    type: Schema.Types.ObjectId,
-    ref: 'User',
+    type: String,
   },
   lastMessage: { type: String },
   img: { type: Boolean },
