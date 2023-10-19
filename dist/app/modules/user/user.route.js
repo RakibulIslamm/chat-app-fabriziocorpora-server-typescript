@@ -8,5 +8,5 @@ userRouter.post('/login', user_controller_1.login);
 userRouter.get('/', user_controller_1.getUsers);
 userRouter.get('/select-members', user_controller_1.getMembers);
 userRouter.get('/user', user_controller_1.getSingleUser);
-userRouter.get('/edit', user_controller_1.editUser);
+userRouter.put('/edit', user_controller_1.editUser);
 exports.default = userRouter;
