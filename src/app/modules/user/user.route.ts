@@ -15,6 +15,6 @@ userRouter.post('/login', login);
 userRouter.get('/', getUsers);
 userRouter.get('/select-members', getMembers);
 userRouter.get('/user', getSingleUser);
-userRouter.get('/edit', editUser);
+userRouter.put('/edit', editUser);
 
 export default userRouter;
