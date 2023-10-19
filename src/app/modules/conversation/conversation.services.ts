@@ -12,7 +12,6 @@ export const createConversationDB = async (
 ): Promise<ConversationType> => {
   const newConversation = await Conversation.create(data);
   await newConversation.populate('participants');
-  await newConversation.populate('sender');
   global.io.emit('conversation', newConversation);
   return newConversation;
 };
@@ -111,8 +110,7 @@ export const getConversationsDB = async (
     .in([userId])
     .sort({ timestamp: -1 })
     .limit(16)
-    .populate('participants')
-    .populate('sender');
+    .populate('participants');
   return conversations;
 };
 
@@ -134,8 +132,7 @@ export const getMoreConversationsDB = async (
     .sort({ timestamp: -1 })
     .skip(skip)
     .limit(limit)
-    .populate('participants')
-    .populate('sender');
+    .populate('participants');
   return conversations;
 };
 
@@ -146,9 +143,9 @@ export const getSingleConversationDB = async (
   if (!conversationId) {
     throw new ApiError(httpStatus.BAD_REQUEST, 'Conversation id required');
   }
-  const conversation = await Conversation.findById(conversationId)
-    .populate('participants')
-    .populate('sender');
+  const conversation = await Conversation.findById(conversationId).populate(
+    'participants'
+  );
   if (!conversation) {
     throw new ApiError(httpStatus.BAD_REQUEST, 'Conversation not found');
   }

@@ -23,7 +23,6 @@ const message_model_1 = __importDefault(require("../message/message.model"));
 const createConversationDB = (data) => __awaiter(void 0, void 0, void 0, function* () {
     const newConversation = yield conversation_model_1.default.create(data);
     yield newConversation.populate('participants');
-    yield newConversation.populate('sender');
     server_1.default.io.emit('conversation', newConversation);
     return newConversation;
 });
@@ -91,8 +90,7 @@ const getConversationsDB = (userId) => __awaiter(void 0, void 0, void 0, functio
         .in([userId])
         .sort({ timestamp: -1 })
         .limit(16)
-        .populate('participants')
-        .populate('sender');
+        .populate('participants');
     return conversations;
 });
 exports.getConversationsDB = getConversationsDB;
@@ -110,8 +108,7 @@ const getMoreConversationsDB = (userId, limit = 16, skip = 0) => __awaiter(void 
         .sort({ timestamp: -1 })
         .skip(skip)
         .limit(limit)
-        .populate('participants')
-        .populate('sender');
+        .populate('participants');
     return conversations;
 });
 exports.getMoreConversationsDB = getMoreConversationsDB;
@@ -120,9 +117,7 @@ const getSingleConversationDB = (conversationId) => __awaiter(void 0, void 0, vo
     if (!conversationId) {
         throw new ApiError_1.default(http_status_1.default.BAD_REQUEST, 'Conversation id required');
     }
-    const conversation = yield conversation_model_1.default.findById(conversationId)
-        .populate('participants')
-        .populate('sender');
+    const conversation = yield conversation_model_1.default.findById(conversationId).populate('participants');
     if (!conversation) {
         throw new ApiError_1.default(http_status_1.default.BAD_REQUEST, 'Conversation not found');
     }
