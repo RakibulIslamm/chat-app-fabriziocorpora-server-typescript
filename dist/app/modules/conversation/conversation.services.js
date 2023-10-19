@@ -42,7 +42,7 @@ const updateConversationsDB = (conversationId, data) => __awaiter(void 0, void 0
         : conversation.unseenMessages + 1;
     const updatedDoc = Object.assign(Object.assign({}, data), { unseenMessages: unseenCount });
     server_1.default.io.emit('update-conversation', {
-        data: Object.assign({}, data),
+        data: Object.assign(Object.assign({}, data), { unseenMessages: unseenCount }),
         id: conversationId,
     });
     const updatedConversation = yield conversation_model_1.default.findByIdAndUpdate(conversationId, updatedDoc, { new: true });

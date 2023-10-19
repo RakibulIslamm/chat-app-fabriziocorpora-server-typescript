@@ -18,7 +18,7 @@ const ConversationSchema = new Schema<ConversationType>({
   lastMessage: { type: String },
   img: { type: Boolean },
   timestamp: { type: Number },
-  unseenMessages: Number,
+  unseenMessages: { type: Number },
 });
 
 const Conversation = model<ConversationType, ConversationModel>(

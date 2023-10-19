@@ -18,7 +18,7 @@ const ConversationSchema = new mongoose_1.Schema({
     lastMessage: { type: String },
     img: { type: Boolean },
     timestamp: { type: Number },
-    unseenMessages: Number,
+    unseenMessages: { type: Number },
 });
 const Conversation = (0, mongoose_1.model)('Conversation', ConversationSchema);
 exports.default = Conversation;

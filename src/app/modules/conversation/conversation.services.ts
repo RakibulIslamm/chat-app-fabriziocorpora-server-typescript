@@ -39,7 +39,7 @@ export const updateConversationsDB = async (
     unseenMessages: unseenCount,
   };
   global.io.emit('update-conversation', {
-    data: { ...data },
+    data: { ...data, unseenMessages: unseenCount },
     id: conversationId,
   });
   const updatedConversation = await Conversation.findByIdAndUpdate(
