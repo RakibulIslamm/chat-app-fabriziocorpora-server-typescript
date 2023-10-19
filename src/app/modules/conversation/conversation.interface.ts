@@ -10,6 +10,7 @@ export type ConversationType = {
   lastMessage?: string;
   img: boolean;
   timestamp: number;
+  unseenMessages: number;
 };
 
 export type ConversationModel = Model<ConversationType>;

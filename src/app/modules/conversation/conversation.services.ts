@@ -30,22 +30,22 @@ export const updateConversationsDB = async (
     throw new ApiError(httpStatus.BAD_REQUEST, 'Conversation Not found');
   }
 
+  const unseenCount =
+    conversation.sender !== data.sender ? 1 : conversation.unseenMessages + 1;
+
   const updatedDoc = {
     ...data,
+    unseenMessages: unseenCount,
   };
-
+  global.io.emit('update-conversation', {
+    data: { ...data },
+    id: conversationId,
+  });
   const updatedConversation = await Conversation.findByIdAndUpdate(
     conversationId,
     updatedDoc,
     { new: true }
-  )
-    .populate('participants')
-    .populate('sender');
-
-  global.io.emit('update-conversation', {
-    data: updatedConversation,
-    id: conversationId,
-  });
+  );
   return updatedConversation;
 };
 

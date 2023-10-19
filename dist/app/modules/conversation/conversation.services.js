@@ -37,14 +37,13 @@ const updateConversationsDB = (conversationId, data) => __awaiter(void 0, void 0
     if (!conversation) {
         throw new ApiError_1.default(http_status_1.default.BAD_REQUEST, 'Conversation Not found');
     }
-    const updatedDoc = Object.assign({}, data);
-    const updatedConversation = yield conversation_model_1.default.findByIdAndUpdate(conversationId, updatedDoc, { new: true })
-        .populate('participants')
-        .populate('sender');
+    const unseenCount = conversation.sender !== data.sender ? 1 : conversation.unseenMessages + 1;
+    const updatedDoc = Object.assign(Object.assign({}, data), { unseenMessages: unseenCount });
     server_1.default.io.emit('update-conversation', {
-        data: updatedConversation,
+        data: Object.assign({}, data),
         id: conversationId,
     });
+    const updatedConversation = yield conversation_model_1.default.findByIdAndUpdate(conversationId, updatedDoc, { new: true });
     return updatedConversation;
 });
 exports.updateConversationsDB = updateConversationsDB;
