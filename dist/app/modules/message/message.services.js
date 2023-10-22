@@ -22,6 +22,8 @@ const http_status_1 = __importDefault(require("http-status"));
 const sendMessageDB = (message) => __awaiter(void 0, void 0, void 0, function* () {
     // const newMessage = await Message.create(message);
     const newMessage = new message_model_1.default(message);
+    // const socket = findSocketByUserId('652a52b47a16a06cdbdafc4f');
+    // console.log(socket);
     server_1.default.io.emit('message', newMessage);
     yield newMessage.save();
     return newMessage;

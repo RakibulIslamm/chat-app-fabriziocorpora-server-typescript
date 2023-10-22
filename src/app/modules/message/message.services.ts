@@ -1,6 +1,6 @@
 import { MessageType } from './message.interface';
 import Message from './message.model';
-import global from '../../../server';
+import global, { findSocketByUserId } from '../../../server';
 import Conversation from '../conversation/conversation.model';
 import ApiError from '../../errors/ApiError';
 import httpStatus from 'http-status';
@@ -11,6 +11,8 @@ export const sendMessageDB = async (
 ): Promise<MessageType> => {
   // const newMessage = await Message.create(message);
   const newMessage = new Message(message);
+  // const socket = findSocketByUserId('652a52b47a16a06cdbdafc4f');
+  // console.log(socket);
   global.io.emit('message', newMessage);
   await newMessage.save();
   return newMessage;

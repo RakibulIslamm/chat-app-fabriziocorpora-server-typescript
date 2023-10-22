@@ -12,6 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.findSocketByUserId = void 0;
 require("colors");
 const http_1 = __importDefault(require("http"));
 const app_1 = __importDefault(require("./app/app"));
@@ -132,6 +133,17 @@ io.on('connection', socket => {
         }
     }));
 });
+function findSocketByUserId(userId) {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    for (const [socketId, socket] of io.of('/').sockets) {
+        console.log(socketId);
+        if (socket.userId === userId) {
+            return socket;
+        }
+    }
+    return null;
+}
+exports.findSocketByUserId = findSocketByUserId;
 process.on('SIGTERM', () => {
     console.log('Sigterm is received');
     if (server) {

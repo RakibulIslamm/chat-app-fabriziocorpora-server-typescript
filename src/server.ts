@@ -152,6 +152,17 @@ io.on('connection', socket => {
   });
 });
 
+export function findSocketByUserId(userId: string) {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  for (const [socketId, socket] of io.of('/').sockets) {
+    console.log(socketId);
+    if (socket.userId === userId) {
+      return socket;
+    }
+  }
+  return null;
+}
+
 process.on('SIGTERM', () => {
   console.log('Sigterm is received');
   if (server) {
