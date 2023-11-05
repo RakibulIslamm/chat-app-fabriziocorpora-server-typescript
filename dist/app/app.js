@@ -9,6 +9,7 @@ const http_status_1 = __importDefault(require("http-status"));
 const routes_1 = __importDefault(require("../routes"));
 const globalErrorHandler_1 = require("./middlewares/globalErrorHandler");
 const multer_1 = __importDefault(require("multer"));
+const path_1 = __importDefault(require("path"));
 const app = (0, express_1.default)();
 app.use((0, cors_1.default)());
 app.use(express_1.default.json());
@@ -22,10 +23,11 @@ app.use('/api', routes_1.default);
 app.get('/', (req, res) => {
     res.send('Hello From Server');
 });
+const uploadDirectory = path_1.default.join(__dirname, 'uploads');
 // File upload
 const storage = multer_1.default.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, 'uploads/'); // Store files in the "uploads" folder
+        cb(null, uploadDirectory); // Store files in the "uploads" folder
     },
     filename: function (req, file, cb) {
         cb(null, Date.now() + '-' + file.originalname);

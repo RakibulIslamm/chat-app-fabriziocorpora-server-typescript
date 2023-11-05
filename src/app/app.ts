@@ -4,6 +4,7 @@ import httpStatus from 'http-status';
 import router from '../routes';
 import { globalErrorHandler } from './middlewares/globalErrorHandler';
 import multer from 'multer';
+import path from 'path';
 
 const app: Application = express();
 
@@ -23,10 +24,12 @@ app.get('/', (req: Request, res: Response) => {
   res.send('Hello From Server');
 });
 
+const uploadDirectory = path.join(__dirname, 'uploads');
+
 // File upload
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, 'uploads/'); // Store files in the "uploads" folder
+    cb(null, uploadDirectory); // Store files in the "uploads" folder
   },
   filename: function (req, file, cb) {
     cb(null, Date.now() + '-' + file.originalname);
