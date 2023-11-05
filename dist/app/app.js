@@ -24,7 +24,7 @@ app.get('/', (req, res) => {
     res.send('Hello From Server');
 });
 const uploadDirectory = path_1.default.join(process.cwd(), 'uploads');
-console.log('Upload dir', uploadDirectory);
+// console.log('Upload dir', uploadDirectory);
 // File upload
 const storage = multer_1.default.diskStorage({
     destination: function (req, file, cb) {

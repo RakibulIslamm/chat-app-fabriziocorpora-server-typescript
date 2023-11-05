@@ -98,7 +98,7 @@ exports.deleteMessageDB = deleteMessageDB;
 const deleteAllMessageDB = (id) => __awaiter(void 0, void 0, void 0, function* () {
     // const idObj = new mongoose.Types.ObjectId(id);
     const result = yield message_model_1.default.deleteMany({ conversationId: id });
-    server_1.default.io.emit('delete-all-messages', result);
+    server_1.default.io.emit('delete-all-messages', id);
     return result;
 });
 exports.deleteAllMessageDB = deleteAllMessageDB;
