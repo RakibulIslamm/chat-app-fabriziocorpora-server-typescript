@@ -4,7 +4,6 @@ import global, { findSocketByUserId } from '../../../server';
 import Conversation from '../conversation/conversation.model';
 import ApiError from '../../errors/ApiError';
 import httpStatus from 'http-status';
-import mongoose from 'mongoose';
 
 //* Send message
 export const sendMessageDB = async (
