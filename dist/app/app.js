@@ -38,7 +38,7 @@ const upload = (0, multer_1.default)({ storage: storage });
 app.post('/api/upload', upload.single('file'), (req, res, next) => {
     var _a;
     try {
-        const fileUrl = `${req.protocol}://${req.get('host')}/uploads/${(_a = req === null || req === void 0 ? void 0 : req.file) === null || _a === void 0 ? void 0 : _a.filename}`;
+        const fileUrl = `/uploads/${(_a = req === null || req === void 0 ? void 0 : req.file) === null || _a === void 0 ? void 0 : _a.filename}`;
         res.json({ fileUrl });
     }
     catch (err) {
