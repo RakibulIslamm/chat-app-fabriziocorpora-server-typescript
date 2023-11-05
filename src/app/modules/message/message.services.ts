@@ -16,9 +16,10 @@ export const sendMessageDB = async (
     const participant = conversation?.participants.find(
       id => id.toString() !== message?.sender?.id?.toString()
     );
-    const socket = findSocketByUserId(participant?.toString() || '');
+    const socket = findSocketByUserId(participant?.toString());
+    // console.log(socket);
     if (socket) {
-      socket.broadcast.emit('message', newMessage);
+      socket.emit('message', newMessage);
     }
   } else if (conversation?.isGroup) {
     global.io.in(conversation._id.toString()).emit('message', newMessage);

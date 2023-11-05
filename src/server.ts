@@ -162,9 +162,10 @@ io.on('connection', socket => {
   });
 });
 
-export function findSocketByUserId(userId: string) {
-  if (Object.prototype.hasOwnProperty.call(connectedUsers, userId)) {
-    return connectedUsers[userId];
+export function findSocketByUserId(userId = '') {
+  const socket = connectedUsers[userId];
+  if (socket) {
+    return socket;
   }
   return null;
 }
