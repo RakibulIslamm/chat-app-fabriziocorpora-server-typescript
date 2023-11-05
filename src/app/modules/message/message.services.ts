@@ -73,6 +73,6 @@ export const deleteMessageDB = async (
 export const deleteAllMessageDB = async (id: string) => {
   // const idObj = new mongoose.Types.ObjectId(id);
   const result = await Message.deleteMany({ conversationId: id });
-  global.io.emit('delete-all-messages', result);
+  global.io.emit('delete-all-messages', id);
   return result;
 };
