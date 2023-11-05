@@ -25,7 +25,7 @@ app.get('/', (req: Request, res: Response) => {
 });
 
 const uploadDirectory = path.join(process.cwd(), 'uploads');
-console.log('Upload dir', uploadDirectory);
+// console.log('Upload dir', uploadDirectory);
 
 // File upload
 const storage = multer.diskStorage({
