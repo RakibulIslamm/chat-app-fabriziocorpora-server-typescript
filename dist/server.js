@@ -141,9 +141,10 @@ io.on('connection', socket => {
         }
     }));
 });
-function findSocketByUserId(userId) {
-    if (Object.prototype.hasOwnProperty.call(connectedUsers, userId)) {
-        return connectedUsers[userId];
+function findSocketByUserId(userId = '') {
+    const socket = connectedUsers[userId];
+    if (socket) {
+        return socket;
     }
     return null;
 }

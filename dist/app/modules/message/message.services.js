@@ -47,9 +47,10 @@ const sendMessageDB = (message) => __awaiter(void 0, void 0, void 0, function* (
     const newMessage = yield message_model_1.default.create(Object.assign(Object.assign({}, message), { status: 'sent' }));
     if (!(conversation === null || conversation === void 0 ? void 0 : conversation.isGroup)) {
         const participant = conversation === null || conversation === void 0 ? void 0 : conversation.participants.find(id => { var _a, _b; return id.toString() !== ((_b = (_a = message === null || message === void 0 ? void 0 : message.sender) === null || _a === void 0 ? void 0 : _a.id) === null || _b === void 0 ? void 0 : _b.toString()); });
-        const socket = (0, server_1.findSocketByUserId)((participant === null || participant === void 0 ? void 0 : participant.toString()) || '');
+        const socket = (0, server_1.findSocketByUserId)(participant === null || participant === void 0 ? void 0 : participant.toString());
+        // console.log(socket);
         if (socket) {
-            socket.broadcast.emit('message', newMessage);
+            socket.emit('message', newMessage);
         }
     }
     else if (conversation === null || conversation === void 0 ? void 0 : conversation.isGroup) {
