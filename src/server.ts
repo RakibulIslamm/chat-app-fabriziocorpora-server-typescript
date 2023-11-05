@@ -3,7 +3,7 @@ import http from 'http';
 import app from './app/app';
 import mongoose from 'mongoose';
 import config from './config';
-import { Server } from 'socket.io';
+import { Server, Socket } from 'socket.io';
 import Message from './app/modules/message/message.model';
 import User from './app/modules/user/user.model';
 import Conversation from './app/modules/conversation/conversation.model';
@@ -57,10 +57,13 @@ async function run() {
 
 run();
 
+const connectedUsers: { [key: string]: Socket } = {};
+
 io.on('connection', socket => {
   //* New user
   socket.on('new_user', async function (id) {
     socket.userId = id;
+    connectedUsers[id] = socket;
     const user = await User.findByIdAndUpdate(
       id,
       { status: 'online' },
@@ -71,6 +74,11 @@ io.on('connection', socket => {
     }
   });
 
+  //* Join room
+  socket.on('room', id => {
+    socket.join(id);
+  });
+
   //* Heartbeat
   socket.on('heartbeat', () => {
     // console.log(socket.userId);
@@ -78,6 +86,7 @@ io.on('connection', socket => {
 
   //* Leave user
   socket.on('leavedUser', async id => {
+    delete connectedUsers[id];
     const user = await User.findByIdAndUpdate(
       id,
       { status: 'offline', lastActive: Date.now() },
@@ -90,6 +99,7 @@ io.on('connection', socket => {
 
   //* Disconnect
   socket.on('disconnect', async () => {
+    delete connectedUsers[socket.userId];
     const user = await User.findByIdAndUpdate(
       socket.userId,
       { status: 'offline', lastActive: Date.now() },
@@ -153,12 +163,8 @@ io.on('connection', socket => {
 });
 
 export function findSocketByUserId(userId: string) {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  for (const [socketId, socket] of io.of('/').sockets) {
-    console.log(socketId);
-    if (socket.userId === userId) {
-      return socket;
-    }
+  if (Object.prototype.hasOwnProperty.call(connectedUsers, userId)) {
+    return connectedUsers[userId];
   }
   return null;
 }

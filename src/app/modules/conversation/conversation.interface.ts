@@ -8,7 +8,8 @@ export type ConversationType = {
   participants: [Schema.Types.ObjectId];
   sender: string;
   lastMessage?: string;
-  img: boolean;
+  img?: boolean;
+  file?: boolean;
   timestamp: number;
   unseenMessages: number;
 };

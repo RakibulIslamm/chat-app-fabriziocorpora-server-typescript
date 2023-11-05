@@ -7,4 +7,5 @@ messageRouter.post('/send-message', message_controller_1.sendMessage);
 messageRouter.get('/', message_controller_1.getMessages);
 messageRouter.get('/more-messages', message_controller_1.getMoreMessages);
 messageRouter.delete('/delete-message/:id', message_controller_1.deleteMessage);
+messageRouter.delete('/delete-all-message/:id', message_controller_1.deleteAllMessage);
 exports.default = messageRouter;

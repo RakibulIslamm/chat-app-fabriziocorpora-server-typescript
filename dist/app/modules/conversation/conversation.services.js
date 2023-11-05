@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getSearchGroupDB = exports.getSearchChatDB = exports.getSingleConversationDB = exports.getMoreConversationsDB = exports.getConversationsDB = exports.deleteConversationDB = exports.joinGroupDB = exports.updateConversationsDB = exports.createConversationDB = void 0;
+exports.getSearchGroupDB = exports.getSearchChatDB = exports.getSingleConversationDB = exports.getMoreConversationsDB = exports.getConversationsDB = exports.deleteConversationDB = exports.addGroupMembersDB = exports.joinGroupDB = exports.updateConversationsDB = exports.createConversationDB = void 0;
 const http_status_1 = __importDefault(require("http-status"));
 const conversation_model_1 = __importDefault(require("./conversation.model"));
 const server_1 = __importDefault(require("../../../server"));
@@ -68,6 +68,22 @@ const joinGroupDB = (conversationId, userId) => __awaiter(void 0, void 0, void 0
     }
 });
 exports.joinGroupDB = joinGroupDB;
+//* Add members to group conversation
+const addGroupMembersDB = (conversationId, userIds) => __awaiter(void 0, void 0, void 0, function* () {
+    const conversation = yield conversation_model_1.default.findById(conversationId);
+    if (conversation) {
+        const joinedConversation = yield conversation_model_1.default.findByIdAndUpdate(conversationId, { $push: { participants: { $each: userIds } } }, { new: true }).populate('participants');
+        server_1.default.io.emit('add-members', {
+            updatedConversation: joinedConversation,
+            id: conversationId,
+        });
+        return joinedConversation;
+    }
+    else {
+        throw new ApiError_1.default(http_status_1.default.BAD_REQUEST, 'Conversation not found');
+    }
+});
+exports.addGroupMembersDB = addGroupMembersDB;
 //* Delete conversation
 const deleteConversationDB = (id) => __awaiter(void 0, void 0, void 0, function* () {
     const conversation = yield conversation_model_1.default.findById(id);

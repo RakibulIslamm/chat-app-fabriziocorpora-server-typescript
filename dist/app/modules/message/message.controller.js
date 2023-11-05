@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteMessage = exports.getMoreMessages = exports.getMessages = exports.sendMessage = void 0;
+exports.deleteAllMessage = exports.deleteMessage = exports.getMoreMessages = exports.getMessages = exports.sendMessage = void 0;
 const message_services_1 = require("./message.services");
 const sendResponse_1 = require("../../utils/sendResponse");
 const http_status_1 = __importDefault(require("http-status"));
@@ -93,3 +93,21 @@ const deleteMessage = (req, res, next) => __awaiter(void 0, void 0, void 0, func
     }
 });
 exports.deleteMessage = deleteMessage;
+// Delete message
+const deleteAllMessage = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id } = req.params;
+    try {
+        const deletedMessage = yield (0, message_services_1.deleteAllMessageDB)(id);
+        (0, sendResponse_1.sendResponse)(res, {
+            statusCode: http_status_1.default.OK,
+            success: true,
+            data: deletedMessage,
+            meta: null,
+            message: 'All Message deleted successfully',
+        });
+    }
+    catch (error) {
+        next(error);
+    }
+});
+exports.deleteAllMessage = deleteAllMessage;

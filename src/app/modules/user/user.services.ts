@@ -2,6 +2,7 @@ import { UserType } from './user.interface';
 import Conversation from '../conversation/conversation.model';
 import User from './user.model';
 import ApiError from '../../errors/ApiError';
+import { ObjectId } from 'mongoose';
 
 //* Register
 export const registerUserDB = async (
@@ -74,15 +75,16 @@ export const getSingleUserDB = async (username: string): Promise<UserType> => {
   return user;
 };
 
-//* Get users for group invite
+//* Get users for join group
 export const getMembersDB = async (
   query: string,
-  currentUserId: string
+  currentUserId: string,
+  addedUsers: ObjectId[]
 ): Promise<UserType[]> => {
   const users = await User.find({
     $and: [
       {
-        _id: { $nin: [currentUserId] },
+        _id: { $nin: [currentUserId, ...addedUsers] },
       },
       {
         $or: [

@@ -64,16 +64,22 @@ function run() {
     });
 }
 run();
+const connectedUsers = {};
 io.on('connection', socket => {
     //* New user
     socket.on('new_user', function (id) {
         return __awaiter(this, void 0, void 0, function* () {
             socket.userId = id;
+            connectedUsers[id] = socket;
             const user = yield user_model_1.default.findByIdAndUpdate(id, { status: 'online' }, { new: true });
             if (user) {
                 io.emit('online', user._id);
             }
         });
+    });
+    //* Join room
+    socket.on('room', id => {
+        socket.join(id);
     });
     //* Heartbeat
     socket.on('heartbeat', () => {
@@ -81,6 +87,7 @@ io.on('connection', socket => {
     });
     //* Leave user
     socket.on('leavedUser', (id) => __awaiter(void 0, void 0, void 0, function* () {
+        delete connectedUsers[id];
         const user = yield user_model_1.default.findByIdAndUpdate(id, { status: 'offline', lastActive: Date.now() }, { new: true });
         if (user) {
             io.emit('offline', { id: user._id, lastActive: user.lastActive });
@@ -88,6 +95,7 @@ io.on('connection', socket => {
     }));
     //* Disconnect
     socket.on('disconnect', () => __awaiter(void 0, void 0, void 0, function* () {
+        delete connectedUsers[socket.userId];
         const user = yield user_model_1.default.findByIdAndUpdate(socket.userId, { status: 'offline', lastActive: Date.now() }, { new: true });
         if (user) {
             io.emit('offline', { id: user._id, lastActive: user.lastActive });
@@ -134,12 +142,8 @@ io.on('connection', socket => {
     }));
 });
 function findSocketByUserId(userId) {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    for (const [socketId, socket] of io.of('/').sockets) {
-        console.log(socketId);
-        if (socket.userId === userId) {
-            return socket;
-        }
+    if (Object.prototype.hasOwnProperty.call(connectedUsers, userId)) {
+        return connectedUsers[userId];
     }
     return null;
 }

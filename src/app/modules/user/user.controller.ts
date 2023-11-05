@@ -11,6 +11,8 @@ import {
 import ApiError from '../../errors/ApiError';
 import { sendResponse } from '../../utils/sendResponse';
 import { UserType } from './user.interface';
+import Conversation from '../conversation/conversation.model';
+import mongoose, { ObjectId } from 'mongoose';
 
 // Register
 export const registerUser = async (
@@ -88,8 +90,25 @@ export const getMembers = async (
 ) => {
   const query = req.query.q;
   const currentUser = req.query.id;
+  const conversationId = req.query.conversationId;
+  let addedUsers: ObjectId[];
   try {
-    const users = await getMembersDB(query as string, currentUser as string);
+    if (conversationId) {
+      const isValid = mongoose.Types.ObjectId.isValid(conversationId as string);
+      if (isValid) {
+        const conversation = await Conversation.findById(conversationId);
+        addedUsers = conversation ? conversation?.participants : [];
+      } else {
+        addedUsers = [];
+      }
+    } else {
+      addedUsers = [];
+    }
+    const users = await getMembersDB(
+      query as string,
+      currentUser as string,
+      addedUsers as ObjectId[]
+    );
     sendResponse<UserType[]>(res, {
       statusCode: httpStatus.OK,
       success: true,
@@ -98,7 +117,7 @@ export const getMembers = async (
       message: 'Users retrieved successfully',
     });
   } catch (error) {
-    next(next);
+    next(error);
   }
 };
 

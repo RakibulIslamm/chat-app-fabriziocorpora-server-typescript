@@ -5,6 +5,7 @@ const conversation_controller_1 = require("./conversation.controller");
 const conversationRouter = (0, express_1.Router)();
 conversationRouter.post('/', conversation_controller_1.createConversation);
 conversationRouter.put('/join-group', conversation_controller_1.joinGroup);
+conversationRouter.put('/add-members', conversation_controller_1.addGroupMembers);
 conversationRouter.get('/', conversation_controller_1.getConversations);
 conversationRouter.get('/more-conversations', conversation_controller_1.getMoreConversations);
 conversationRouter.get('/search-chat', conversation_controller_1.searchChat);

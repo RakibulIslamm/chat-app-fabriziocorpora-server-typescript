@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import {
+  deleteAllMessageDB,
   deleteMessageDB,
   getMessagesDB,
   getMoreMessagesDB,
@@ -96,6 +97,27 @@ export const deleteMessage = async (
       data: { deletedMessage },
       meta: null,
       message: 'Message deleted successfully',
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// Delete message
+export const deleteAllMessage = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const { id } = req.params;
+  try {
+    const deletedMessage = await deleteAllMessageDB(id);
+    sendResponse<unknown>(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      data: deletedMessage,
+      meta: null,
+      message: 'All Message deleted successfully',
     });
   } catch (error) {
     next(error);

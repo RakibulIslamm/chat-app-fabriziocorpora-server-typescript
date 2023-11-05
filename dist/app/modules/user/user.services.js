@@ -71,12 +71,12 @@ const getSingleUserDB = (username) => __awaiter(void 0, void 0, void 0, function
     return user;
 });
 exports.getSingleUserDB = getSingleUserDB;
-//* Get users for group invite
-const getMembersDB = (query, currentUserId) => __awaiter(void 0, void 0, void 0, function* () {
+//* Get users for join group
+const getMembersDB = (query, currentUserId, addedUsers) => __awaiter(void 0, void 0, void 0, function* () {
     const users = yield user_model_1.default.find({
         $and: [
             {
-                _id: { $nin: [currentUserId] },
+                _id: { $nin: [currentUserId, ...addedUsers] },
             },
             {
                 $or: [

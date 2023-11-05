@@ -4,17 +4,25 @@ import global, { findSocketByUserId } from '../../../server';
 import Conversation from '../conversation/conversation.model';
 import ApiError from '../../errors/ApiError';
 import httpStatus from 'http-status';
+import mongoose from 'mongoose';
 
 //* Send message
 export const sendMessageDB = async (
   message: Partial<MessageType>
 ): Promise<MessageType> => {
-  // const newMessage = await Message.create(message);
-  const newMessage = new Message(message);
-  // const socket = findSocketByUserId('652a52b47a16a06cdbdafc4f');
-  // console.log(socket);
-  global.io.emit('message', newMessage);
-  await newMessage.save();
+  const conversation = await Conversation.findById(message.conversationId);
+  const newMessage = await Message.create({ ...message, status: 'sent' });
+  if (!conversation?.isGroup) {
+    const participant = conversation?.participants.find(
+      id => id.toString() !== message?.sender?.id?.toString()
+    );
+    const socket = findSocketByUserId(participant?.toString() || '');
+    if (socket) {
+      socket.broadcast.emit('message', newMessage);
+    }
+  } else if (conversation?.isGroup) {
+    global.io.in(conversation._id.toString()).emit('message', newMessage);
+  }
   return newMessage;
 };
 
@@ -37,8 +45,8 @@ export const getMessagesDB = async (
 //* Get more messages
 export const getMoreMessagesDB = async (
   conversationId: string,
-  limit = 10,
-  skip = 0
+  limit = 16,
+  skip: number
 ): Promise<MessageType[]> => {
   const isExist = await Conversation.findById(conversationId);
   if (!isExist) {
@@ -59,4 +67,12 @@ export const deleteMessageDB = async (
   const deletedMessage = await Message.findByIdAndRemove(id);
   global.io.emit('delete-message', deletedMessage);
   return deletedMessage?._id;
+};
+
+//* Delete all messages
+export const deleteAllMessageDB = async (id: string) => {
+  // const idObj = new mongoose.Types.ObjectId(id);
+  const result = await Message.deleteMany({ conversationId: id });
+  global.io.emit('delete-all-messages', result);
+  return result;
 };

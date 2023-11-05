@@ -2,6 +2,7 @@ import httpStatus from 'http-status';
 import { sendResponse } from '../../utils/sendResponse';
 import { ConversationType } from './conversation.interface';
 import {
+  addGroupMembersDB,
   createConversationDB,
   deleteConversationDB,
   getConversationsDB,
@@ -67,6 +68,31 @@ export const joinGroup = async (
       data: conversation,
       meta: null,
       message: 'Group joined successfully',
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// Add members to group
+export const addGroupMembers = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { id } = req.query;
+    const { userIds } = req.body;
+    const conversation = await addGroupMembersDB(
+      id as string,
+      userIds as string[]
+    );
+    sendResponse<ConversationType>(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      data: conversation,
+      meta: null,
+      message: 'Members added successfully',
     });
   } catch (error) {
     next(error);

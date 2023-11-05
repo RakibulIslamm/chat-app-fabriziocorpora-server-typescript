@@ -17,6 +17,8 @@ const http_status_1 = __importDefault(require("http-status"));
 const user_services_1 = require("./user.services");
 const ApiError_1 = __importDefault(require("../../errors/ApiError"));
 const sendResponse_1 = require("../../utils/sendResponse");
+const conversation_model_1 = __importDefault(require("../conversation/conversation.model"));
+const mongoose_1 = __importDefault(require("mongoose"));
 // Register
 const registerUser = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const user = req.body;
@@ -79,8 +81,23 @@ exports.getUsers = getUsers;
 const getMembers = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const query = req.query.q;
     const currentUser = req.query.id;
+    const conversationId = req.query.conversationId;
+    let addedUsers;
     try {
-        const users = yield (0, user_services_1.getMembersDB)(query, currentUser);
+        if (conversationId) {
+            const isValid = mongoose_1.default.Types.ObjectId.isValid(conversationId);
+            if (isValid) {
+                const conversation = yield conversation_model_1.default.findById(conversationId);
+                addedUsers = conversation ? conversation === null || conversation === void 0 ? void 0 : conversation.participants : [];
+            }
+            else {
+                addedUsers = [];
+            }
+        }
+        else {
+            addedUsers = [];
+        }
+        const users = yield (0, user_services_1.getMembersDB)(query, currentUser, addedUsers);
         (0, sendResponse_1.sendResponse)(res, {
             statusCode: http_status_1.default.OK,
             success: true,
@@ -90,7 +107,7 @@ const getMembers = (req, res, next) => __awaiter(void 0, void 0, void 0, functio
         });
     }
     catch (error) {
-        next(next);
+        next(error);
     }
 });
 exports.getMembers = getMembers;

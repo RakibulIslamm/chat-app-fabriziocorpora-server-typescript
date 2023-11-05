@@ -81,6 +81,30 @@ export const joinGroupDB = async (
   }
 };
 
+//* Add members to group conversation
+export const addGroupMembersDB = async (
+  conversationId: string,
+  userIds: string[]
+): Promise<ConversationType | null> => {
+  const conversation = await Conversation.findById(conversationId);
+
+  if (conversation) {
+    const joinedConversation = await Conversation.findByIdAndUpdate(
+      conversationId,
+      { $push: { participants: { $each: userIds } } },
+      { new: true }
+    ).populate('participants');
+    global.io.emit('add-members', {
+      updatedConversation: joinedConversation,
+      id: conversationId,
+    });
+
+    return joinedConversation;
+  } else {
+    throw new ApiError(httpStatus.BAD_REQUEST, 'Conversation not found');
+  }
+};
+
 //* Delete conversation
 export const deleteConversationDB = async (
   id: string

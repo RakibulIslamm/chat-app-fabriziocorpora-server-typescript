@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.searchGroup = exports.searchChat = exports.getSingleConversation = exports.getMoreConversations = exports.getConversations = exports.deleteConversation = exports.joinGroup = exports.updateConversation = exports.createConversation = void 0;
+exports.searchGroup = exports.searchChat = exports.getSingleConversation = exports.getMoreConversations = exports.getConversations = exports.deleteConversation = exports.addGroupMembers = exports.joinGroup = exports.updateConversation = exports.createConversation = void 0;
 const http_status_1 = __importDefault(require("http-status"));
 const sendResponse_1 = require("../../utils/sendResponse");
 const conversation_services_1 = require("./conversation.services");
@@ -68,6 +68,25 @@ const joinGroup = (req, res, next) => __awaiter(void 0, void 0, void 0, function
     }
 });
 exports.joinGroup = joinGroup;
+// Add members to group
+const addGroupMembers = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { id } = req.query;
+        const { userIds } = req.body;
+        const conversation = yield (0, conversation_services_1.addGroupMembersDB)(id, userIds);
+        (0, sendResponse_1.sendResponse)(res, {
+            statusCode: http_status_1.default.OK,
+            success: true,
+            data: conversation,
+            meta: null,
+            message: 'Members added successfully',
+        });
+    }
+    catch (error) {
+        next(error);
+    }
+});
+exports.addGroupMembers = addGroupMembers;
 // delete conversation
 const deleteConversation = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;

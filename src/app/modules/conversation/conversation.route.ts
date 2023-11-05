@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import {
+  addGroupMembers,
   createConversation,
   deleteConversation,
   getConversations,
@@ -15,6 +16,7 @@ const conversationRouter = Router();
 
 conversationRouter.post('/', createConversation);
 conversationRouter.put('/join-group', joinGroup);
+conversationRouter.put('/add-members', addGroupMembers);
 conversationRouter.get('/', getConversations);
 conversationRouter.get('/more-conversations', getMoreConversations);
 conversationRouter.get('/search-chat', searchChat);
