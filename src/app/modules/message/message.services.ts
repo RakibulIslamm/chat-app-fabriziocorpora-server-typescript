@@ -9,9 +9,9 @@ import httpStatus from 'http-status';
 export const sendMessageDB = async (
   message: Partial<MessageType>
 ): Promise<MessageType> => {
-  const conversation = await Conversation.findById(message.conversationId);
+  // const conversation = await Conversation.findById(message.conversationId);
   const newMessage = await Message.create({ ...message, status: 'sent' });
-  if (!conversation?.isGroup) {
+  /* if (!conversation?.isGroup) {
     const participant = conversation?.participants.find(
       id => id.toString() !== message?.sender?.id?.toString()
     );
@@ -22,7 +22,8 @@ export const sendMessageDB = async (
     }
   } else if (conversation?.isGroup) {
     global.io.in(conversation._id.toString()).emit('message', newMessage);
-  }
+  } */
+  global.io.emit('message', newMessage);
   return newMessage;
 };
 
