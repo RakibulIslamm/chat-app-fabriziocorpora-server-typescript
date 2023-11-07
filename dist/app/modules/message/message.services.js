@@ -56,7 +56,6 @@ const sendMessageDB = (message) => __awaiter(void 0, void 0, void 0, function* (
     else if (conversation === null || conversation === void 0 ? void 0 : conversation.isGroup) {
         server_1.default.io.in(conversation._id.toString()).emit('message', newMessage);
     }
-    // global.io.emit('message', newMessage);
     return newMessage;
 });
 exports.sendMessageDB = sendMessageDB;

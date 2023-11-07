@@ -1,4 +1,4 @@
-import { Model, ObjectId, Schema } from 'mongoose';
+import { Model, Schema } from 'mongoose';
 
 export type MessageType = {
   _id?: string;
@@ -7,7 +7,6 @@ export type MessageType = {
     name: string;
     id: string;
   };
-  receiver: Schema.Types.ObjectId;
   conversationId: Schema.Types.ObjectId;
   message: string;
   img: string;
