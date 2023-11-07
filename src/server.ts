@@ -3,7 +3,7 @@ import http from 'http';
 import app from './app/app';
 import mongoose from 'mongoose';
 import config from './config';
-import { Server, Socket } from 'socket.io';
+import { Server } from 'socket.io';
 import Message from './app/modules/message/message.model';
 import User from './app/modules/user/user.model';
 import Conversation from './app/modules/conversation/conversation.model';
@@ -57,13 +57,13 @@ async function run() {
 
 run();
 
-const connectedUsers: { [key: string]: Socket } = {};
+// const connectedUsers: { [key: string]: Socket } = {};
 
 io.on('connection', socket => {
   //* New user
   socket.on('new_user', async function (id) {
     socket.userId = id;
-    connectedUsers[id] = socket;
+    // connectedUsers[id] = socket;
     const user = await User.findByIdAndUpdate(
       id,
       { status: 'online' },
@@ -86,7 +86,7 @@ io.on('connection', socket => {
 
   //* Leave user
   socket.on('leavedUser', async id => {
-    delete connectedUsers[id];
+    // delete connectedUsers[id];
     const user = await User.findByIdAndUpdate(
       id,
       { status: 'offline', lastActive: Date.now() },
@@ -99,7 +99,7 @@ io.on('connection', socket => {
 
   //* Disconnect
   socket.on('disconnect', async () => {
-    delete connectedUsers[socket.userId];
+    // delete connectedUsers[socket.userId];
     const user = await User.findByIdAndUpdate(
       socket.userId,
       { status: 'offline', lastActive: Date.now() },
@@ -162,13 +162,13 @@ io.on('connection', socket => {
   });
 });
 
-export function findSocketByUserId(userId = '') {
+/* export function findSocketByUserId(userId = '') {
   const socket = connectedUsers[userId];
   if (socket) {
     return socket;
   }
   return null;
-}
+} */
 
 process.on('SIGTERM', () => {
   console.log('Sigterm is received');
