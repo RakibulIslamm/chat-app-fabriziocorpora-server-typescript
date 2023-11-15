@@ -3,6 +3,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = require("mongoose");
 const ConversationSchema = new mongoose_1.Schema({
     isGroup: { type: Boolean, default: false },
+    isCall: { type: Boolean, default: false },
+    callInfo: {
+        isGroupCall: { type: Boolean },
+        callType: { type: String },
+    },
     groupName: { type: String },
     groupCreator: { type: mongoose_1.Schema.Types.ObjectId, ref: 'User' },
     groupColor: { type: String },

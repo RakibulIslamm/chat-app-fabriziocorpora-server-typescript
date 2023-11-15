@@ -7,6 +7,16 @@ const MessageSchema = new mongoose_1.Schema({
         name: { type: String },
         id: { type: mongoose_1.Schema.Types.ObjectId },
     },
+    isCall: { type: Boolean, default: false },
+    callInfo: {
+        callTime: {
+            h: { type: Number },
+            m: { type: Number },
+            s: { type: Number },
+        },
+        isGroupCall: { type: Boolean },
+        callType: { type: String },
+    },
     conversationId: {
         type: mongoose_1.Schema.Types.ObjectId,
         ref: 'Conversation',
