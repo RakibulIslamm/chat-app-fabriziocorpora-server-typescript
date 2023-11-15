@@ -84,6 +84,27 @@ io.on('connection', socket => {
     // console.log(socket.userId);
   });
 
+  //* Call listening
+  socket.on('sendSignal', ({ caller, participants, callInfo }) => {
+    socket.broadcast.emit('callSignal', { caller, participants, callInfo });
+  });
+
+  socket.on('receiveSignal', receiver => {
+    socket.broadcast.emit('receiveSignal', receiver);
+  });
+
+  socket.on('lineBusy', ({ receiver, caller }) => {
+    socket.broadcast.emit('lineBusy', { receiver, caller });
+  });
+
+  socket.on('callAnswered', callInfoData => {
+    socket.broadcast.emit('callAnswered', callInfoData);
+  });
+
+  socket.on('callEnd', callInfoData => {
+    socket.broadcast.emit('callEnd', callInfoData);
+  });
+
   //* Leave user
   socket.on('leavedUser', async id => {
     delete connectedUsers[id];

@@ -7,6 +7,12 @@ export type MessageType = {
     name: string;
     id: string;
   };
+  isCall?: boolean;
+  callInfo?: {
+    callTime: { h: number; m: number; s: number };
+    isGroupCall: boolean;
+    callType: 'audio' | 'video';
+  };
   conversationId: Schema.Types.ObjectId;
   message: string;
   img: string;

@@ -7,6 +7,16 @@ const MessageSchema = new Schema<MessageType>({
     name: { type: String },
     id: { type: Schema.Types.ObjectId },
   },
+  isCall: { type: Boolean, default: false },
+  callInfo: {
+    callTime: {
+      h: { type: Number },
+      m: { type: Number },
+      s: { type: Number },
+    },
+    isGroupCall: { type: Boolean },
+    callType: { type: String },
+  },
   conversationId: {
     type: Schema.Types.ObjectId,
     ref: 'Conversation',

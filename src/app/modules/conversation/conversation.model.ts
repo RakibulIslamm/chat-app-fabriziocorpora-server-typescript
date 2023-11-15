@@ -3,6 +3,11 @@ import { ConversationModel, ConversationType } from './conversation.interface';
 
 const ConversationSchema = new Schema<ConversationType>({
   isGroup: { type: Boolean, default: false },
+  isCall: { type: Boolean, default: false },
+  callInfo: {
+    isGroupCall: { type: Boolean },
+    callType: { type: String },
+  },
   groupName: { type: String },
   groupCreator: { type: Schema.Types.ObjectId, ref: 'User' },
   groupColor: { type: String },

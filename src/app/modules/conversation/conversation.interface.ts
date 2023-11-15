@@ -2,6 +2,11 @@ import { Model, Schema } from 'mongoose';
 
 export type ConversationType = {
   isGroup: true | false;
+  isCall?: boolean;
+  callInfo?: {
+    isGroupCall: boolean;
+    callType: 'audio' | 'video';
+  };
   groupName?: string;
   groupCreator?: Schema.Types.ObjectId;
   groupColor?: string;
