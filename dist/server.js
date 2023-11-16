@@ -98,8 +98,11 @@ io.on('connection', socket => {
     socket.on('callAnswered', callInfoData => {
         socket.broadcast.emit('callAnswered', callInfoData);
     });
+    socket.on('group-call', callInformation => {
+        socket.broadcast.emit('group-call', callInformation);
+    });
     socket.on('callEnd', user => {
-        socket.broadcast.emit('callEnd', user);
+        io.emit('callEnd', user);
     });
     //* Leave user
     socket.on('leavedUser', (id) => __awaiter(void 0, void 0, void 0, function* () {
