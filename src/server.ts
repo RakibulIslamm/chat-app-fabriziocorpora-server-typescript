@@ -101,8 +101,8 @@ io.on('connection', socket => {
     socket.broadcast.emit('callAnswered', callInfoData);
   });
 
-  socket.on('callEnd', callInfoData => {
-    socket.broadcast.emit('callEnd', callInfoData);
+  socket.on('callEnd', user => {
+    socket.broadcast.emit('callEnd', user);
   });
 
   //* Leave user
