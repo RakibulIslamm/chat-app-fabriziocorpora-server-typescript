@@ -101,8 +101,12 @@ io.on('connection', socket => {
     socket.broadcast.emit('callAnswered', callInfoData);
   });
 
+  socket.on('group-call', callInformation => {
+    socket.broadcast.emit('group-call', callInformation);
+  });
+
   socket.on('callEnd', user => {
-    socket.broadcast.emit('callEnd', user);
+    io.emit('callEnd', user);
   });
 
   //* Leave user
